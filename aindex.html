@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Feedback Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #4f46e5; /* Main blue color */
+            --primary-light: #6366f1; /* Lighter blue */
+            --secondary: #f59e0b; /* Yellow */
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/c95b054f-430e-4e7b-b441-ee16c97a7786.png'); /* Replace with your background image URL */
+            background-size: cover;
+            background-position: center;
+            color: #111827;
+        }
+        
+        .feedback-card {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .feedback-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-light);
+        }
+        
+        .rating-star {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #d1d5db; /* Default color for unselected stars */
+        }
+        
+        .rating-star.selected {
+            color: #4f46e5; /* Color for selected stars */
+        }
+
+        .form-heading {
+            color: var(--primary); /* Blue color for form headings */
+        }
+        
+        @media (max-width: 640px) {
+            .feedback-form {
+                width: 90%;
+                margin: 0 auto;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-white mb-2">Student Feedback Portal</h1>
+            <p class="text-xl text-gray-300">Your opinion helps us improve</p>
+        </header>
+        
+        <!-- Feedback Form -->
+        <div class="feedback-card bg-white rounded-lg p-8 feedback-form max-w-2xl mx-auto">
+            <h2 class="text-2xl font-semibold text-center mb-6 form-heading">Feedback Form</h2>
+            
+            <form id="feedbackForm" class="space-y-6">
+                <!-- Personal Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1 form-heading">Full Name</label>
+                        <input type="text" id="name" name="name" required 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1 form-heading">Email Address</label>
+                        <input type="email" id="email" name="email" required 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+                
+                <!-- Academic Information -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="course" class="block text-sm font-medium text-gray-700 mb-1 form-heading">Course</label>
+                        <select id="course" name="course" required 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="" disabled selected>Select Course</option>
+                            <option value="Introduction to Programming">Introduction to Programming</option>
+                            <option value="Data Structures">Data Structures</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Database Systems">Database Systems</option>
+                            <option value="Software Engineering">Software Engineering</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="year" class="block text-sm font-medium text-gray-700 mb-1 form-heading">Year of Study</label>
+                        <select id="year" name="year" required 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="" disabled selected>Select year</option>
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+                            <option value="Postgraduate">Postgraduate</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Rating Section -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2 form-heading">Overall Satisfaction</label>
+                    <div class="flex justify-center space-x-4 mb-2" id="ratingContainer">
+                        <span class="rating-star text-3xl" data-rating="1">★</span>
+                        <span class="rating-star text-3xl" data-rating="2">★</span>
+                        <span class="rating-star text-3xl" data-rating="3">★</span>
+                        <span class="rating-star text-3xl" data-rating="4">★</span>
+                        <span class="rating-star text-3xl" data-rating="5">★</span>
+                    </div>
+                    <input type="hidden" id="rating" name="rating" value="0">
+                    <div class="flex justify-between text-xs text-gray-500">
+                        <span>Poor</span>
+                        <span>Excellent</span>
+                    </div>
+                </div>
+                
+                <!-- Feedback Text -->
+                <div>
+                    <label for="feedback" class="block text-sm font-medium text-gray-700 mb-1 form-heading">Your Feedback</label>
+                    <textarea id="feedback" name="feedback" rows="4" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="What did you like or what could be improved?"></textarea>
+                </div>
+                
+                <!-- Suggestions -->
+                <div>
+                    <label for="suggestions" class="block text-sm font-medium text-gray-700 mb-1 form-heading">
+                        Suggestions for Improvement (Optional)
+                    </label>
+                    <textarea id="suggestions" name="suggestions" rows="3"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Any suggestions for how we can improve?"></textarea>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="pt-4">
+                    <button type="submit" class="btn-primary w-full py-3 px-4 text-white font-semibold rounded-md shadow-md hover:shadow-lg transition duration-300">
+                        Submit Feedback
+                    </button>
+                </div>
+            </form>
+            
+            <div id="successMessage" class="hidden mt-6 p-4 bg-green-100 text-green-800 rounded-md border border-green-200 text-center">
+                <div class="flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="font-medium">Feedback Submitted Successfully!</span>
+                </div>
+                <p class="mt-2 text-sm">Your input is valuable for improving our educational programs.</p>
+            </div>
+        </div>
+        
+        <!-- Statistics Section -->
+        <div class="mt-16">
+            <h2 class="text-2xl font-semibold text-center text-white mb-8">Feedback Statistics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="bg-white rounded-lg p-6 shadow-sm text-center">
+                    <div class="text-4xl font-bold text-indigo-600 mb-2">87%</div>
+                    <div class="text-gray-600">Course Satisfaction</div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-sm text-center">
+                    <div class="text-4xl font-bold text-indigo-600 mb-2">92%</div>
+                    <div class="text-gray-600">Would Recommend</div>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-sm text-center">
+                    <div class="text-4xl font-bold text-indigo-600 mb-2">4.7</div>
+                    <div class="text-gray-600">Instructor Rating</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('feedbackForm');
+            const successMessage = document.getElementById('successMessage');
+            const ratingStars = document.querySelectorAll('.rating-star');
+            const ratingInput = document.getElementById('rating');
+            
+            // Star rating functionality
+            ratingStars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-rating');
+                    ratingInput.value = rating;
+                    
+                    // Update star colors
+                    ratingStars.forEach((s, index) => {
+                        if (index < rating) {
+                            s.classList.add('selected'); // Add selected class for blue color
+                        } else {
+                            s.classList.remove('selected'); // Remove selected class for default color
+                        }
+                    });
+                });
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Basic validation
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const course = document.getElementById('course').value;
+                const year = document.getElementById('year').value;
+                const feedback = document.getElementById('feedback').value.trim();
+                
+                if (!name || !email || course === "" || year === "" || !feedback) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                if (ratingInput.value === "0") {
+                    alert('Please provide a rating');
+                    return;
+                }
+                
+                // Validate email format
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
+                
+                // Collect form data
+                const formData = {
+
+                    name: name,
+                    email: email,
+                    course: course,
+                    year: year,
+                    rating: ratingInput.value,
+                    feedback: feedback,
+                    suggestions: document.getElementById('suggestions').value.trim()
+                    
+                };
+                
+                // Send data to Python backend
+                console.log(formData); // Add this line before the fetch call
+                fetch('http://localhost:5000/submit-feedback', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        showSuccessMessage();
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to submit feedback'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit feedback. Please try again later.');
+                });
+            });
+            
+            function showSuccessMessage() {
+                form.style.display = 'none';
+                successMessage.classList.remove('hidden');
+                
+                // Scroll to success message
+                successMessage.scrollIntoView({ behavior: 'smooth' });
+                
+                // In a real implementation, you might reset the form after a delay
+                // setTimeout(() => {
+                //     form.reset();
+                //     successMessage.classList.add('hidden');
+                //     form.style.display = 'block';
+                //     ratingStars.forEach(star => star.style.color = '#d1d5db');
+                //     ratingInput.value = '0';
+                // }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>
